@@ -1,6 +1,6 @@
 import Image from "next/image";
-import styles from "../../../styles/footer.module.css";
-import logo from "../../images/logo.png";
+import styles from "../../styles/footer.module.css";
+import logo from "../images/logo.png";
 
 export default function Footer() {
 	return (

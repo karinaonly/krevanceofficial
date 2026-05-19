@@ -1,0 +1,92 @@
+.section {
+  background: #eef1ed;
+  padding: clamp(3.5rem, 6vw, 5.5rem) 0;
+}
+
+.inner {
+  width: min(1200px, 92%);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.header {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 2.2rem;
+}
+
+.eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: #4b5c52;
+  font-family: var(--font-zen-dots), "Zen Dots", "AvantGarde Bk BT", "ITC Avant Garde Gothic", "Century Gothic", sans-serif;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  color: #2a3c2f;
+  font-family: var(--font-zen-dots), "Zen Dots", var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  margin: 0 auto;
+  max-width: 520px;
+  font-size: 0.85rem;
+  color: #4b5c52;
+  line-height: 1.6;
+  font-family: "AvantGarde Bk BT", "ITC Avant Garde Gothic", "Century Gothic", sans-serif;
+}
+
+.logos {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1.6rem 2rem;
+  justify-items: center;
+  color: #2a3c2f;
+  font-family: "AvantGarde Bk BT", "ITC Avant Garde Gothic", "Century Gothic", sans-serif;
+}
+
+.logoItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  color: rgba(47, 61, 49, 0.75);
+}
+
+.logoIcon {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 2px solid rgba(47, 61, 49, 0.55);
+  display: inline-block;
+  position: relative;
+}
+
+.logoIcon::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 999px;
+  border: 2px solid rgba(47, 61, 49, 0.55);
+}
+
+.logoText {
+  text-transform: lowercase;
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .logos {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .logos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -1,7 +1,7 @@
 .section {
   background: #eef1ed;
   padding: clamp(3rem, 6vw, 5.5rem) 0;
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: "AvantGarde Bk BT", "ITC Avant Garde Gothic", "Century Gothic", sans-serif;
 }
 
 .inner {
@@ -15,6 +15,7 @@
   text-transform: uppercase;
   color: #3b4b40;
   margin: 0 0 0.6rem;
+  font-family: var(--font-zen-dots), "Zen Dots", "AvantGarde Bk BT", "ITC Avant Garde Gothic", "Century Gothic", sans-serif;
 }
 
 .title {
@@ -58,6 +59,7 @@
   text-transform: uppercase;
   color: #2f3d31;
   letter-spacing: 0.08em;
+  font-family: var(--font-zen-dots), "Zen Dots", "AvantGarde Bk BT", "ITC Avant Garde Gothic", "Century Gothic", sans-serif;
 }
 
 .cardDescription {

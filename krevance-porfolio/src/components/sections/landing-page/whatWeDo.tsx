@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import styles from "../../styles/whatWeDo.module.css";
+import styles from "../../../styles/whatWeDo.module.css";
 
 interface ServiceItem {
   id: string;

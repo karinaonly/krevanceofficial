@@ -27,6 +27,7 @@
   padding: 1.2rem 3rem;
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
   transition: all 0.3s ease;
+  font-family: "AvantGarde Bk BT", "ITC Avant Garde Gothic", "Century Gothic", sans-serif;
 }
 
 .nav-shape-collapsed {

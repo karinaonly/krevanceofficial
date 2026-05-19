@@ -1,6 +1,6 @@
 import type { ComponentType, SVGProps } from "react";
 import { ClipboardList, Code, Ear, PenTool, Rocket } from "lucide-react";
-import styles from "../../styles/ourApproach.module.css";
+import styles from "../../../styles/ourApproach.module.css";
 
 type IconType = ComponentType<SVGProps<SVGSVGElement>>;
 

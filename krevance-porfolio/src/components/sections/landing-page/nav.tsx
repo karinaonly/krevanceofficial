@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import styles from "../../styles/nav.module.css";
+import styles from "../../../styles/nav.module.css";
 import Image from "next/image";
-import navLogo from "../images/navlogo.svg";
-import logoIcon from "../images/logo.png";
+import Link from "next/link";
+import navLogo from "../../images/navlogo.svg";
+import logoIcon from "../../images/logo.png";
 
 export default function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -37,13 +38,13 @@ export default function Nav() {
         >
           {/* Left Side Links */}
           <div className={`${styles["nav-links"]} ${isCollapsed ? styles["nav-links-hidden"] : ""}`}>
-            <a href="#">About Us</a>
+            <a href="/aboutus">About Us</a>
             <a href="#">Services</a>
           </div>
 
           {/* Logo / Toggle Button */}
-          <button
-            type="button"
+          <Link
+            href="/landingpage"
             className={`${styles["logo-button"]} ${
               isCollapsed ? styles["logo-button-collapsed"] : ""
             }`}
@@ -56,7 +57,7 @@ export default function Nav() {
               height={isCollapsed ? 40 : 50}
               className={isCollapsed ? styles["logo-collapsed"] : styles["logo-expanded"]}
             />
-          </button>
+          </Link>
 
           {/* Right Side Links */}
           <div className={`${styles["nav-links"]} ${isCollapsed ? styles["nav-links-hidden"] : ""}`}>

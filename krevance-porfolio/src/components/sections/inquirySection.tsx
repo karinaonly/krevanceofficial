@@ -1,4 +1,4 @@
-import styles from "../../../styles/inquirySection.module.css";
+import styles from "../../styles/inquirySection.module.css";
 
 export default function InquirySection() {
 	return (

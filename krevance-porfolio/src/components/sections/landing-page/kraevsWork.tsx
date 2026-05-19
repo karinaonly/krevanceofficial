@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import styles from "../../styles/kraevsWork.module.css";
+import styles from "../../../styles/kraevsWork.module.css";
 
 interface ProjectItem {
 	id: string;
