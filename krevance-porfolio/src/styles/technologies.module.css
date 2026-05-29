@@ -38,13 +38,51 @@
   color: #4b5c52;
   line-height: 1.6;
   font-family: "AvantGarde Bk BT", "ITC Avant Garde Gothic", "Century Gothic", sans-serif;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.20);
 }
 
-.logos {
+.marqueeStack {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 1.6rem 2rem;
-  justify-items: center;
+  gap: 1.2rem;
+}
+
+.marqueeMask {
+  overflow: hidden;
+  padding: 1.2rem 0;
+  position: relative;
+}
+
+.marqueeMask::before,
+.marqueeMask::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.marqueeMask::before {
+  left: 0;
+  background: linear-gradient(90deg, #eef1ed 0%, rgba(238, 241, 237, 0) 100%);
+}
+
+.marqueeMask::after {
+  right: 0;
+  background: linear-gradient(270deg, #eef1ed 0%, rgba(238, 241, 237, 0) 100%);
+}
+
+.marqueeTrack {
+  display: flex;
+  width: max-content;
+}
+
+.logoRow {
+  display: flex;
+  align-items: center;
+  gap: 2.2rem;
+  padding-right: 2.2rem;
   color: #2a3c2f;
   font-family: "AvantGarde Bk BT", "ITC Avant Garde Gothic", "Century Gothic", sans-serif;
 }
@@ -55,38 +93,17 @@
   gap: 0.45rem;
   font-size: 0.85rem;
   color: rgba(47, 61, 49, 0.75);
+  white-space: nowrap;
 }
 
 .logoIcon {
   width: 18px;
   height: 18px;
-  border-radius: 999px;
-  border: 2px solid rgba(47, 61, 49, 0.55);
-  display: inline-block;
-  position: relative;
-}
-
-.logoIcon::after {
-  content: "";
-  position: absolute;
-  inset: 4px;
-  border-radius: 999px;
-  border: 2px solid rgba(47, 61, 49, 0.55);
+  color: rgba(47, 61, 49, 0.7);
+  flex-shrink: 0;
 }
 
 .logoText {
   text-transform: lowercase;
   font-weight: 600;
-}
-
-@media (max-width: 900px) {
-  .logos {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 600px) {
-  .logos {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }

@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "framer-motion";
 import styles from "../../../styles/whatmkDiff.module.css";
 
 const FEATURES = [
@@ -29,31 +32,78 @@ const FEATURES = [
 ];
 
 export default function WhatMakesDifferent() {
+  const headerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.12 },
+    },
+  };
+
+  const headerItem = {
+    hidden: { opacity: 0, y: 12, filter: "blur(4px)" },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)",
+      transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+    },
+  };
+
+  const gridContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.12, delayChildren: 0.08 },
+    },
+  };
+
+  const cardItem = {
+    hidden: { opacity: 0, y: 16 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.48, ease: [0.22, 1, 0.36, 1] },
+    },
+  };
+
   return (
     <section className={styles.section}>
       <div className={styles.inner}>
-        <div className={styles.header}>
-          <div className={styles.headerLeft}>
+        <motion.div
+          className={styles.header}
+          variants={headerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.6 }}
+        >
+          <motion.div className={styles.headerLeft} variants={headerItem}>
             <p className={styles.eyebrow}>Why Choose Us</p>
             <h2 className={styles.title}>What Makes Us Different?</h2>
-          </div>
-          <p className={styles.headerNote}>
+          </motion.div>
+          <motion.p className={styles.headerNote} variants={headerItem}>
             From the smallest interface element to the overall system flow,
             Krevance ensures precision, creativity, and strategy align to
             create lasting value for clients.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
-        <div className={styles.grid}>
+        <motion.div
+          className={styles.grid}
+          variants={gridContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.35 }}
+        >
           {FEATURES.map((feature) => (
-            <article key={feature.id} className={styles.card}>
+            <motion.article key={feature.id} className={styles.card} variants={cardItem}>
               <span className={styles.cardNumber}>{feature.id}</span>
               <span className={styles.cardIcon} aria-hidden="true">✦</span>
               <h3 className={styles.cardTitle}>{feature.title}</h3>
               <p className={styles.cardText}>{feature.text}</p>
-            </article>
+            </motion.article>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
