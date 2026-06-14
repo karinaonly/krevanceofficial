@@ -94,7 +94,7 @@ export default function Hero() {
                             <span className={styles.divider}></span>
                             <span className={styles.statText}>
                                 <span className={styles.statLabel}>Trusted Collaborations</span>
-                                <span className={styles.statNote}>Supporting Businesses And Startups.</span>
+                                <span className={styles.statNote}>Supporting Businesses and Startups.</span>
                             </span>
                         </li>
                         <li className={styles.statItem}>

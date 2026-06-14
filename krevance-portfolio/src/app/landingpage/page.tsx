@@ -16,7 +16,7 @@ export default function ServicesPage() {
         <KraevsWork />
         <WhatWeDo />
         <OurApproach /> 
-        <InquirySection />
+        {/* <InquirySection /> */}
     </main>
   );
 }

@@ -18,7 +18,7 @@ export default function Home() {
       <KraevsWork />
       <WhatWeDo />
       <OurApproach />
-      <InquirySection />
+      {/* <InquirySection /> */}
     </main>
   );
 }

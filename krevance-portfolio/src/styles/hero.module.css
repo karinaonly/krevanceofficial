@@ -41,7 +41,7 @@
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: #3f5347;
-  font-family: "AvantGarde Bk BT", "ITC Avant Garde Gothic", "Century Gothic", sans-serif;
+  font-family: var(--font-zen-dots), "Zen Dots", "AvantGarde Bk BT", "ITC Avant Garde Gothic", "Century Gothic", sans-serif;
 }
 
 .title {

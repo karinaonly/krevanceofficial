@@ -127,7 +127,7 @@ export default function WhatWeDo() {
           </div>
           <p className={styles.headerNote}>
             Five focused services built to cover every dimension of your digital
-            growth - from first idea to long-term success.
+            growth, from first idea to long-term success.
           </p>
         </div>
 

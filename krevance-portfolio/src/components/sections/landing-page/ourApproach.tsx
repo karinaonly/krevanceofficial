@@ -60,8 +60,7 @@ export default function OurApproach() {
 						<h2 className={styles.title}>Our Approach</h2>
 					</div>
 					<p className={styles.subtitle}>
-						With a clear five-step method, Krevance ensures every project
-						moves from concept to launch with precision.
+						With a clear five-step method, Krevance ensures every project moves from concept to launch with precision.
 					</p>
 				</div>
 
