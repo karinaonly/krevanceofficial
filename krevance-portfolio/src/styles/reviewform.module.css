@@ -70,8 +70,8 @@
   text-transform: uppercase;
   color: #6b6560;
   margin: 0 0 0.4rem;
-  font-weight: 600;
-  font-family: var(--font-zen-dots), "Zen Dots", "AvantGarde Bk BT", sans-serif;
+  font-weight: 800;
+  font-family: "AvantGarde Bk BT", sans-serif;
 }
 
 .fieldValue {

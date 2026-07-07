@@ -61,25 +61,26 @@ const steps: Step[] = [
 // Budget pricing now comes from getBudgetPrice() in labels.ts,
 // which is dependent on the selected project type.
 
-const timelineMultiplierMap: Record<string, { multiplier: number; label: string }> = {
-  asap:      { multiplier: 1.35, label: 'Rush (+40%)'    },
-  '1month':  { multiplier: 1.15, label: 'Fast (+20%)'    },
-  '3months': { multiplier: 1,    label: 'Standard (1x)'  },
-  flexible:  { multiplier: 1,  label: 'Standard (1x)' }, // ← also fixed duplicate label bug
-};
+  const timelineMultiplierMap: Record<string, { multiplier: number; label: string }> = {
+    asap:      { multiplier: 1.35, label: 'Rush (+40%)'    },
+    '1month':  { multiplier: 1.15, label: 'Fast (+20%)'    },
+    '3months': { multiplier: 1,    label: 'Standard (1x)'  },
+    flexible:  { multiplier: 1,  label: 'Standard (1x)' }, // ← also fixed duplicate label bug
+  };
 
-// ─── Shared chevron icons ─────────────────────────────────────────────────────
-const ChevronRight = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="100%" height="100%">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-  </svg>
-);
 
-const ChevronLeft = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="100%" height="100%">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-  </svg>
-);
+  // ─── Shared chevron icons ─────────────────────────────────────────────────────
+  const ChevronRight = () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="100%" height="100%">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+    </svg>
+  );
+
+  const ChevronLeft = () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="100%" height="100%">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+    </svg>
+  );
 
 // ─── Main component ───────────────────────────────────────────────────────────
 const ContactUsSection: React.FC = () => {
@@ -97,6 +98,8 @@ const ContactUsSection: React.FC = () => {
   const [submitted,   setSubmitted]   = useState(false);
   const [showBooking, setShowBooking] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError]   = useState<string | null>(null);
 
   const availableAddOns = useMemo(
       () => getAddOns(formData.projectType),
@@ -151,11 +154,38 @@ const ContactUsSection: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleFinalSubmit = () => {
-    clearFormStorage();
-    resetForm();
-    setShowBooking(false);
-    setSubmitted(true);
+  const handleFinalSubmit = async () => {
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const res = await fetch('/api/contact-inquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          formData,
+          costBreakdown,
+          meetingDisplay,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to send inquiry');
+      }
+
+      // ✅ Success
+      clearFormStorage();
+      resetForm();
+      setShowBooking(false);
+      setSubmitted(true);
+    } catch (err: any) {
+      console.error(err);
+      setSubmitError(err.message || 'Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleBackToReview = () => {
@@ -237,19 +267,25 @@ const ContactUsSection: React.FC = () => {
           <div className={styles.successWrapper}>
             <div className={styles.successInner}>
               <div className={styles.successIcon}>
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#ffffff"
+                  strokeWidth={3}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M5 13l4 4L19 7" />
                 </svg>
               </div>
               <h1 className={styles.successTitle}>Thank You!</h1>
               <p className={styles.successText}>
                 Your project inquiry has been submitted successfully.
                 We&apos;ll be in touch within 24–48 hours.
+              </p>
+              <p className={styles.successText} style={{ marginTop: 12, fontSize: 14 }}>
+                A confirmation email has been sent to your inbox.
+                Please check your spam or junk folder if you haven&apos;t received it.
               </p>
             </div>
           </div>
@@ -271,6 +307,8 @@ const ContactUsSection: React.FC = () => {
               onTimeSelect={(time) => updateFormData('selectedTime', time)}
               onBack={handleBackToReview}
               onConfirm={handleFinalSubmit}
+              isSubmitting={isSubmitting}
+              submitError={submitError}
             />
           </div>
         </div>
@@ -329,6 +367,8 @@ interface BookingScreenProps {
   onTimeSelect: (time: string) => void;
   onBack: () => void;
   onConfirm: () => void;
+  isSubmitting?: boolean;
+  submitError?: string | null;
 }
 
 const BookingScreen: React.FC<BookingScreenProps> = ({
@@ -338,24 +378,39 @@ const BookingScreen: React.FC<BookingScreenProps> = ({
   onTimeSelect,
   onBack,
   onConfirm,
+  isSubmitting = false,
+  submitError = null,
 }) => {
-  const hasSelection = !!(selectedDate && selectedTime);
+  const hasDate = !!selectedDate;
+  const hasTime = !!selectedTime;
+  const hasSelection = hasDate && hasTime;
+
+  const buttonLabel = isSubmitting
+    ? 'Sending...'
+    : !hasDate
+    ? 'Select a Date First'
+    : !hasTime
+    ? 'Select a Time'
+    : 'Confirm & Submit';
 
   return (
     <div className={styles.bookingScreen}>
-      <div className={styles.bookingHeader}>
-        <h1 className={styles.bookingTitle}>Let&apos;s Schedule a Call</h1>
-        <p className={styles.bookingSubtitle}>
-          Pick a date and time that works for you
-        </p>
-      </div>
+       <BookMeetingCard
+          selectedDate={selectedDate}
+          onDateSelect={onDateSelect}
+          selectedTime={selectedTime}
+          onTimeSelect={onTimeSelect}
+        />
 
-      <BookMeetingCard
-        selectedDate={selectedDate}
-        onDateSelect={onDateSelect}
-        selectedTime={selectedTime}
-        onTimeSelect={onTimeSelect}
-      />
+      {submitError && (
+        <p className={styles.errorText}>⚠️ {submitError}</p>
+      )}
+
+      {!hasSelection && !submitError && (
+        <p className={styles.dateRequiredHint}>
+          {!hasDate ? 'Please select a date to continue.' : 'Please select a time to continue.'}
+        </p>
+      )}
 
       <hr className={styles.divider} />
 
@@ -365,11 +420,17 @@ const BookingScreen: React.FC<BookingScreenProps> = ({
           onClick={onBack}
           icon={<ChevronLeft />}
           iconPosition="left"
+          disabled={isSubmitting}
         >
           Back to Review
         </Button>
-        <Button onClick={onConfirm} icon={<ChevronRight />} fullWidth>
-          {hasSelection ? 'Confirm & Submit' : 'Skip & Submit'}
+        <Button
+          onClick={onConfirm}
+          icon={<ChevronRight />}
+          fullWidth
+          disabled={!hasSelection || isSubmitting}
+        >
+          {buttonLabel}
         </Button>
       </div>
     </div>

@@ -109,9 +109,12 @@ export const timelineOptions: TimelineOption[] = [
 ];
 
 export const referralOptions: SelectOption[] = [
-  { value: 'Facebook',  label: 'Facebook' },
-  { value: 'Instagram', label: 'Instagram' },
+  { value: 'Google Search',  label: 'Google Search' },
+  { value: 'Facebook', label: 'Facebook' },
+  { value: 'Instagram',  label: 'Instagram' },
   { value: 'LinkedIn',  label: 'LinkedIn' },
+  { value: 'Friend Referral',  label: 'Friend Referral' },
+  { value: 'Event',  label: 'Event' },
 ];
 
 // ─── Label helpers ───────────────────────────────────────────────────────
