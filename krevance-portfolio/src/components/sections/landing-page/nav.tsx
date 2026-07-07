@@ -9,6 +9,75 @@ import navLogo from "../../images/navlogo.svg";
 import logoIcon from "../../images/logo.png";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
+const HAMBURGER_VARIANTS = (reducedMotion: boolean) => ({
+  closed: {
+    rotate: 0,
+    transition: reducedMotion ? { duration: 0 } : { duration: 0.3 },
+  },
+  open: {
+    rotate: 90,
+    transition: reducedMotion ? { duration: 0 } : { duration: 0.3 },
+  },
+});
+
+const HAMBURGER_LINE_VARIANTS = {
+  closed: {
+    rotate: 0,
+    y: 0,
+  },
+  open: {
+    rotate: 45,
+    y: 8,
+  },
+};
+
+const HAMBURGER_LINE_VARIANTS_MIDDLE = {
+  closed: {
+    opacity: 1,
+  },
+  open: {
+    opacity: 0,
+  },
+};
+
+const HAMBURGER_LINE_VARIANTS_BOTTOM = {
+  closed: {
+    rotate: 0,
+    y: 0,
+  },
+  open: {
+    rotate: -45,
+    y: -8,
+  },
+};
+
+const MOBILE_MENU_VARIANTS = (reducedMotion: boolean) => ({
+  hidden: {
+    opacity: 0,
+    y: -10,
+    pointerEvents: "none" as const,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    pointerEvents: "auto" as const,
+    transition: reducedMotion
+      ? { duration: 0 }
+      : {
+          type: "spring" as const,
+          stiffness: 300,
+          damping: 30,
+          mass: 0.8,
+        },
+  },
+  exit: {
+    opacity: 0,
+    y: -10,
+    pointerEvents: "none" as const,
+    transition: reducedMotion ? { duration: 0 } : { duration: 0.2 },
+  },
+});
+
 const NAV_CONTAINER_VARIANTS = (reducedMotion: boolean) => ({
   expanded: {
     width: "100%",
@@ -143,6 +212,8 @@ export default function Nav() {
   const [isMounted, setIsMounted] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [forceExpand, setForceExpand] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   const reducedMotion = useReducedMotion();
   
@@ -153,18 +224,56 @@ export default function Nav() {
   useEffect(() => {
     setIsMounted(true);
     
+    // Set initial mobile state
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    
+    const handleResize = () => checkMobile();
+    window.addEventListener("resize", handleResize, { passive: true });
+    
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    
     const onScroll = () => {
-      const scrolled = window.scrollY > 50;
-      setIsScrolled(scrolled);
-      // If user scrolls back to top, reset the manual override
-      if (!scrolled) setForceExpand(false);
+      // On mobile, no scroll-collapse behavior
     };
 
-    onScroll(); // Run immediately after mount to adapt to existing scroll state
     window.addEventListener("scroll", onScroll, { passive: true });
     
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [isMobile]);
+
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsMobile(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize, { passive: true });
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isMobile]);
+
+  // Desktop/Tablet scroll logic
+  useEffect(() => {
+    if (isMobile) return;
+
+    const onScroll = () => {
+      const scrolled = window.scrollY > 50;
+      setIsScrolled(scrolled);
+      if (!scrolled) setForceExpand(false);
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [isMobile]);
 
   // Logic: Collapse if scrolled, UNLESS the user clicked to force it open
   const isCollapsed = isScrolled && !forceExpand;
@@ -182,6 +291,8 @@ export default function Nav() {
     [shouldReduceMotion]
   );
   const logoVariants = useMemo(() => LOGO_VARIANTS(shouldReduceMotion), [shouldReduceMotion]);
+  const hamburgerVariants = useMemo(() => HAMBURGER_VARIANTS(shouldReduceMotion), [shouldReduceMotion]);
+  const mobileMenuVariants = useMemo(() => MOBILE_MENU_VARIANTS(shouldReduceMotion), [shouldReduceMotion]);
 
   const handleLogoClick = (event: MouseEvent<HTMLAnchorElement>) => {
     if (isCollapsed) {
@@ -195,124 +306,246 @@ export default function Nav() {
     }
   };
 
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
+  const handleMobileNavClick = () => {
+    closeMobileMenu();
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full flex flex-col items-center">
       <div className={styles["navtop-container"]} />
 
-      <div className={styles["nav-wrap"]}>
-        <motion.nav
-          className={styles["nav-shape"]}
-          variants={navVariants}
-          animate={isCollapsed ? "collapsed" : "expanded"}
-          initial={false}
-          layout
-        >
-          <AnimatePresence mode="wait" initial={false}>
-            {!isCollapsed && (
-              <motion.div
-                key="left-links"
-                className={styles["nav-links"]}
-                variants={linkGroupVariants}
-                initial="hidden"
-                animate="show"
-                exit="exit"
-              >
-                {NAV_LINKS.left.map((link) => (
-                  <motion.a
-                    key={link.href}
-                    href={link.href}
-                    className={styles["nav-link"]}
-                    variants={linkItemVariants}
-                    whileHover={shouldReduceMotion ? undefined : { y: -2 }}
-                    whileFocus={shouldReduceMotion ? undefined : { y: -2 }}
-                  >
-                    <span className={styles["nav-link-text"]}>{link.label}</span>
-                    <span className={styles["nav-link-underline"]} aria-hidden="true" />
-                  </motion.a>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <Link
-            href="/landingpage"
-            className={`${styles["logo-button"]} ${
-              isCollapsed ? styles["logo-button-collapsed"] : ""
-            }`.trim()}
-            onClick={handleLogoClick}
-          >
-            <motion.div
-              className={styles["logo-button-inner"]}
-              whileHover={shouldReduceMotion ? undefined : { scale: 1.03 }}
-              whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
-              layout
+      {isMobile ? (
+        // MOBILE LAYOUT
+        <div className={styles["nav-wrap-mobile"]}>
+          <div className={styles["nav-shape-mobile"]}>
+            {/* Logo */}
+            <Link
+              href="/landingpage"
+              className={styles["logo-button-mobile"]}
+              onClick={(e) => {
+                e.preventDefault();
+                closeMobileMenu();
+                window.location.href = "/landingpage";
+              }}
             >
-              <AnimatePresence mode="wait" initial={false}>
-                {isCollapsed ? (
-                  <motion.div
-                    key="logo-icon"
-                    variants={logoVariants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                  >
-                    <Image
-                      src={logoIcon}
-                      alt="Logo"
-                      width={40}
-                      height={40}
-                      className={styles["logo-collapsed"]}
-                    />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="logo-full"
-                    variants={logoVariants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                  >
-                    <Image
-                      src={navLogo}
-                      alt="Logo"
-                      width={140}
-                      height={50}
-                      className={styles["logo-expanded"]}
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          </Link>
+              <Image
+                src={navLogo}
+                alt="Logo"
+                width={140}
+                height={50}
+                className={styles["logo-mobile"]}
+              />
+            </Link>
 
-          <AnimatePresence mode="wait" initial={false}>
-            {!isCollapsed && (
+            {/* Hamburger Menu */}
+            <motion.button
+              className={styles["hamburger-button"]}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              variants={hamburgerVariants}
+              animate={isMobileMenuOpen ? "open" : "closed"}
+              aria-label="Toggle mobile menu"
+              aria-expanded={isMobileMenuOpen}
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <motion.line
+                  x1="3"
+                  y1="6"
+                  x2="21"
+                  y2="6"
+                  variants={HAMBURGER_LINE_VARIANTS}
+                  animate={isMobileMenuOpen ? "open" : "closed"}
+                  transition={{ duration: 0.3 }}
+                />
+                <motion.line
+                  x1="3"
+                  y1="12"
+                  x2="21"
+                  y2="12"
+                  variants={HAMBURGER_LINE_VARIANTS_MIDDLE}
+                  animate={isMobileMenuOpen ? "open" : "closed"}
+                  transition={{ duration: 0.3 }}
+                />
+                <motion.line
+                  x1="3"
+                  y1="18"
+                  x2="21"
+                  y2="18"
+                  variants={HAMBURGER_LINE_VARIANTS_BOTTOM}
+                  animate={isMobileMenuOpen ? "open" : "closed"}
+                  transition={{ duration: 0.3 }}
+                />
+              </svg>
+            </motion.button>
+          </div>
+
+          {/* Mobile Dropdown Menu */}
+          <AnimatePresence>
+            {isMobileMenuOpen && (
               <motion.div
-                key="right-links"
-                className={styles["nav-links"]}
-                variants={linkGroupVariants}
+                className={styles["mobile-menu"]}
+                variants={mobileMenuVariants}
                 initial="hidden"
-                animate="show"
+                animate="visible"
                 exit="exit"
               >
-                {NAV_LINKS.right.map((link) => (
-                  <motion.a
-                    key={link.href}
-                    href={link.href}
-                    className={styles["nav-link"]}
-                    variants={linkItemVariants}
-                    whileHover={shouldReduceMotion ? undefined : { y: -2 }}
-                    whileFocus={shouldReduceMotion ? undefined : { y: -2 }}
-                  >
-                    <span className={styles["nav-link-text"]}>{link.label}</span>
-                    <span className={styles["nav-link-underline"]} aria-hidden="true" />
-                  </motion.a>
-                ))}
+                <nav className={styles["mobile-menu-nav"]}>
+                  {NAV_LINKS.left.map((link) => (
+                    <motion.a
+                      key={link.href}
+                      href={link.href}
+                      className={styles["mobile-menu-link"]}
+                      onClick={handleMobileNavClick}
+                      whileHover={shouldReduceMotion ? undefined : { x: 4 }}
+                      whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+                    >
+                      {link.label}
+                    </motion.a>
+                  ))}
+                  {NAV_LINKS.right.map((link) => (
+                    <motion.a
+                      key={link.href}
+                      href={link.href}
+                      className={styles["mobile-menu-link"]}
+                      onClick={handleMobileNavClick}
+                      whileHover={shouldReduceMotion ? undefined : { x: 4 }}
+                      whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+                    >
+                      {link.label}
+                    </motion.a>
+                  ))}
+                </nav>
               </motion.div>
             )}
           </AnimatePresence>
-        </motion.nav>
-      </div>
+        </div>
+      ) : (
+        // DESKTOP/TABLET LAYOUT
+        <div className={styles["nav-wrap"]}>
+          <motion.nav
+            className={styles["nav-shape"]}
+            variants={navVariants}
+            animate={isCollapsed ? "collapsed" : "expanded"}
+            initial={false}
+            layout
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {!isCollapsed && (
+                <motion.div
+                  key="left-links"
+                  className={styles["nav-links"]}
+                  variants={linkGroupVariants}
+                  initial="hidden"
+                  animate="show"
+                  exit="exit"
+                >
+                  {NAV_LINKS.left.map((link) => (
+                    <motion.a
+                      key={link.href}
+                      href={link.href}
+                      className={styles["nav-link"]}
+                      variants={linkItemVariants}
+                      whileHover={shouldReduceMotion ? undefined : { y: -2 }}
+                      whileFocus={shouldReduceMotion ? undefined : { y: -2 }}
+                    >
+                      <span className={styles["nav-link-text"]}>{link.label}</span>
+                      <span className={styles["nav-link-underline"]} aria-hidden="true" />
+                    </motion.a>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <Link
+              href="/landingpage"
+              className={`${styles["logo-button"]} ${
+                isCollapsed ? styles["logo-button-collapsed"] : ""
+              }`.trim()}
+              onClick={handleLogoClick}
+            >
+              <motion.div
+                className={styles["logo-button-inner"]}
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.03 }}
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+                layout
+              >
+                <AnimatePresence mode="wait" initial={false}>
+                  {isCollapsed ? (
+                    <motion.div
+                      key="logo-icon"
+                      variants={logoVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                    >
+                      <Image
+                        src={logoIcon}
+                        alt="Logo"
+                        width={40}
+                        height={40}
+                        className={styles["logo-collapsed"]}
+                      />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="logo-full"
+                      variants={logoVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                    >
+                      <Image
+                        src={navLogo}
+                        alt="Logo"
+                        width={140}
+                        height={50}
+                        className={styles["logo-expanded"]}
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            </Link>
+
+            <AnimatePresence mode="wait" initial={false}>
+              {!isCollapsed && (
+                <motion.div
+                  key="right-links"
+                  className={styles["nav-links"]}
+                  variants={linkGroupVariants}
+                  initial="hidden"
+                  animate="show"
+                  exit="exit"
+                >
+                  {NAV_LINKS.right.map((link) => (
+                    <motion.a
+                      key={link.href}
+                      href={link.href}
+                      className={styles["nav-link"]}
+                      variants={linkItemVariants}
+                      whileHover={shouldReduceMotion ? undefined : { y: -2 }}
+                      whileFocus={shouldReduceMotion ? undefined : { y: -2 }}
+                    >
+                      <span className={styles["nav-link-text"]}>{link.label}</span>
+                      <span className={styles["nav-link-underline"]} aria-hidden="true" />
+                    </motion.a>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.nav>
+        </div>
+      )}
     </header>
   );
 }

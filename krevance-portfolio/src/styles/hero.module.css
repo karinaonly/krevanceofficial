@@ -86,6 +86,7 @@
   cursor: pointer;
   box-shadow: 0 4px 0 rgba(42, 60, 47, 0.15);
   transition: all 0.2s ease;
+  max-width: 70%;
 }
 
 .cta:hover {
@@ -323,6 +324,11 @@
 @media (max-width: 480px) {
   .title {
     max-width: 100%; /* Sa napakaliit na screen dito na siya pwedeng mag-fluid full width */
+    font-size: clamp(1.5rem, 5vw, 2.2rem);
+  }
+
+  .subtitle{
+    margin-top: 10px;
   }
 
   .ctaGroup {
@@ -333,5 +339,10 @@
   .cta {
     width: 100%;
     justify-content: center;
+  }
+
+  .secondaryLink{
+    font-size: 1rem;
+    margin-top: -0.5rem;
   }
 }

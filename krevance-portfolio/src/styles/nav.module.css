@@ -7,6 +7,7 @@
   width: 100%;
 }
 
+/* ========== DESKTOP/TABLET LAYOUT ========== */
 .nav-wrap {
   width: 100%;
   max-width: 72rem;
@@ -14,33 +15,33 @@
   padding: 0 0.75rem;
 }
 
-/* Find your .nav-shape class and remove clip-path */
 .nav-shape {
   background: #384B3A;
   color: #fff;
   position: relative;
   margin: 0 auto;
-  /* REMOVE THIS LINE: clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%); */
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 2.5rem;
   padding: 1.2rem 3rem;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   font-family: "AvantGarde Bk BT", "ITC Avant Garde Gothic", "Century Gothic", sans-serif;
   will-change: transform, width, height, border-radius, clip-path, backdrop-filter, box-shadow;
+  clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%);
+  backdrop-filter: blur(6px);
+  border-radius: 22px;
 }
 
-/* Also ensure your collapsed utility helper doesn't reintroduce it */
 .nav-shape-collapsed {
   width: 20%;
   margin-left: auto;
   margin-right: auto;
-  /* REMOVE THIS LINE: clip-path: polygon(0 0, 100% 0, 70% 100%, 30% 100%); */
-  border-radius: 0;
+  border-radius: 20px;
   justify-content: center;
   gap: 0;
   align-items: flex-end;
+  clip-path: polygon(0 0, 100% 0, 70% 100%, 30% 100%);
 }
 
 .nav-links {
@@ -70,6 +71,11 @@
   cursor: pointer;
   flex: 0 0 auto;
   z-index: 2;
+  transition: transform 0.2s ease;
+}
+
+.logo-button:active {
+  transform: scale(0.95);
 }
 
 .logo-button-inner {
@@ -106,6 +112,7 @@
   text-decoration: none;
   font-size: 0.95rem;
   white-space: nowrap;
+  transition: color 0.2s ease;
 }
 
 .nav-link-text {
@@ -120,7 +127,12 @@
   bottom: -6px;
   height: 2px;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(134, 239, 172, 0) 0%, rgba(134, 239, 172, 0.9) 50%, rgba(134, 239, 172, 0) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(134, 239, 172, 0) 0%,
+    rgba(134, 239, 172, 0.9) 50%,
+    rgba(134, 239, 172, 0) 100%
+  );
   transform: scaleX(0.2);
   transform-origin: center;
   opacity: 0;
@@ -137,6 +149,149 @@
   opacity: 1;
 }
 
+/* ========== MOBILE LAYOUT (max-width: 768px) ========== */
+.nav-wrap-mobile {
+  width: 100%;
+  margin-top: -30px;
+  padding: 0;
+  position: relative;
+  z-index: 50;
+}
+
+.nav-shape-mobile {
+  background: #384B3A;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+  position: relative;
+}
+
+.logo-button-mobile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  flex: 0 0 auto;
+  z-index: 10;
+  transition: transform 0.2s ease;
+}
+
+.logo-button-mobile:active {
+  transform: scale(0.95);
+}
+
+.logo-mobile {
+  height: 2.2rem;
+  width: auto;
+  object-fit: contain;
+}
+
+.hamburger-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.9);
+  transition: color 0.2s ease;
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.hamburger-button:hover {
+  color: #d1fae5;
+}
+
+.hamburger-button:focus-visible {
+  outline: 2px solid rgba(134, 239, 172, 0.5);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Mobile Dropdown Menu */
+.mobile-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(56, 75, 58, 0.98);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(134, 239, 172, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  border-radius: 0 0 12px 12px;
+  padding: 1rem 0;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobile-menu-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0 1rem;
+}
+
+.mobile-menu-link {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-family: "AvantGarde Bk BT", "ITC Avant Garde Gothic", "Century Gothic", sans-serif;
+  position: relative;
+}
+
+.mobile-menu-link::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 0;
+  background: rgba(134, 239, 172, 0.8);
+  border-radius: 2px;
+  transition: height 0.2s ease;
+}
+
+.mobile-menu-link:hover {
+  background: rgba(134, 239, 172, 0.1);
+  color: #d1fae5;
+}
+
+.mobile-menu-link:hover::before {
+  height: 20px;
+}
+
+.mobile-menu-link:active {
+  transform: scale(0.98);
+}
+
+/* ========== RESPONSIVE MEDIA QUERIES ========== */
+
 @media (max-width: 900px) {
   .nav-shape {
     gap: 1.5rem;
@@ -150,6 +305,46 @@
 
   .nav-link {
     font-size: 0.82rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-shape {
+    display: none;
+  }
+
+  .nav-wrap {
+    display: none;
+  }
+
+  .nav-wrap-mobile {
+    display: block;
+  }
+}
+
+@media (min-width: 768px) {
+  .nav-wrap-mobile {
+    display: none;
+  }
+
+  .nav-shape-mobile {
+    display: none;
+  }
+
+  .mobile-menu {
+    display: none;
+  }
+
+  .hamburger-button {
+    display: none;
+  }
+
+  .logo-button-mobile {
+    display: none;
+  }
+
+  .logo-mobile {
+    display: none;
   }
 }
 
@@ -176,5 +371,23 @@
   .nav-shape-collapsed {
     min-height: 68px;
     clip-path: polygon(0 0, 100% 0, 100% 45%, 80% 45%, 74% 100%, 26% 100%, 20% 45%, 0 45%);
+  }
+
+  .nav-shape-mobile {
+    padding: 0.75rem 0.75rem;
+  }
+
+  .logo-mobile {
+    height: 1.8rem;
+  }
+
+  .hamburger-button {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+
+  .mobile-menu-link {
+    padding: 0.65rem 0.8rem;
+    font-size: 0.88rem;
   }
 }

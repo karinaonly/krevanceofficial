@@ -95,7 +95,7 @@ const SERVICES: ServiceItem[] = [
   },
 ];
 export default function WhatWeDo() {
-  const [activeIndex, setActiveIndex] = useState(1);
+  const [activeIndex, setActiveIndex] = useState(0);
   const activeService = SERVICES[activeIndex];
 
   return (

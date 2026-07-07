@@ -74,9 +74,9 @@ export default function Footer() {
                     </ul>
 
                     <div className={styles.socials}>
-                        <a href="https://www.facebook.com/krevance" aria-label="Facebook" className={styles.socialIcon}><Facebook size={14} /></a>
-                        <a href="https://www.instagram.com/krevance" aria-label="Instagram" className={styles.socialIcon}><Instagram size={14} /></a>
-                        <a href="https://www.linkedin.com/company/krevance" aria-label="LinkedIn" className={styles.socialIcon}><Linkedin size={14} /></a>
+                        <a href="https://www.facebook.com/people/Krevance/61591195844608/" aria-label="Facebook" className={styles.socialIcon}><Facebook size={14} /></a>
+                        <a href="https://www.instagram.com/krevance.official/" aria-label="Instagram" className={styles.socialIcon}><Instagram size={14} /></a>
+                        <a href="https://www.linkedin.com/in/krevance-undefined-196a2141a/" aria-label="LinkedIn" className={styles.socialIcon}><Linkedin size={14} /></a>
                     </div>
                 </div>
             </div>

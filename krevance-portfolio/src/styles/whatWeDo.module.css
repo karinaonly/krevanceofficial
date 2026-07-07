@@ -275,3 +275,10 @@
     grid-template-columns: 1fr;
   }
 }
+@media (max-width: 480px) {
+  .title {
+    max-width: 100%; /* Sa napakaliit na screen dito na siya pwedeng mag-fluid full width */
+    margin-bottom: -3rem;
+  }
+
+}

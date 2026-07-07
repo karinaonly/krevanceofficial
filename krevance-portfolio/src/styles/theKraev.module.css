@@ -215,3 +215,10 @@
     justify-content: center;
   }
 }
+
+@media (max-width: 480px) {
+  
+  .title {
+    font-size: clamp(1.5rem, 5vw, 2.2rem);
+  }
+}
