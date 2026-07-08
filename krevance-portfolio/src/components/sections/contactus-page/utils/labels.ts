@@ -68,7 +68,7 @@ export const addOnsByProjectType: Record<number, AddOn[]> = {
 
   // 4 — E-Commerce Systems
   4: [
-    { id: 'ecom-domain',         name: 'Website Domain (.com)',           price: 1100, priceLabel: '₱1,100 per year' },
+    { id: 'ecom-domain',         name: 'Website Domain (.com)',           price: 800, priceLabel: '₱800 per year' },
     { id: 'ecom-mobile-platform',name: 'Platform | Mobile Application',   price: 5000, priceLabel: 'Starting at ₱5,000' },
     { id: 'ecom-extra-page',     name: 'Additional Website Page',         price: 1500, priceLabel: '₱1,500 / per page' },
     { id: 'ecom-extra-feature',  name: 'Additional Feature',              price: 2000, priceLabel: 'Starting at ₱2,000' },
