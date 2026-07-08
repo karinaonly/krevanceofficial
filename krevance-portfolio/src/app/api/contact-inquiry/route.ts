@@ -283,13 +283,13 @@ function buildUserHtml(formData: any, cost: any, meeting: string) {
     : '—';
 
   const content = `
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 auto;">
       <tr>
-        <td align="center" style="padding:20px 0;">
-          <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+        <td align="center" style="padding:20px 0;text-align:center;">
+          <table role="presentation" align="center" cellspacing="0" cellpadding="0" border="0" style="margin:0 auto;">
             <tr>
-              <td width="88" height="88" align="center" valign="middle" style="background:${theme.successBg};border-radius:50%;">
-                <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+              <td width="88" height="88" align="center" valign="middle" style="background:${theme.successBg};border-radius:50%;text-align:center;">
+                <table role="presentation" align="center" cellspacing="0" cellpadding="0" border="0" style="margin:0 auto;">
                   <tr>
                     <td width="56" height="56" align="center" valign="middle" style="background:${theme.primary};border-radius:50%;color:#ffffff;font-size:28px;font-weight:bold;line-height:56px;text-align:center;">
                       ✓
