@@ -4,12 +4,14 @@
   flex-direction: column;
   gap: 2rem;
   font-family: "AvantGarde Bk BT", "ITC Avant Garde Gothic", "Century Gothic", sans-serif;
+  min-width: 0;      /* allow shrinking inside its parent */
 }
 
 .section {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  min-width: 0;      /* allow shrinking */
 }
 
 .sectionHeader {
@@ -54,13 +56,13 @@
 
 .fields {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));  /* ← key change */
   gap: 1.25rem 2rem;
 }
 
 .fieldsTwo {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);             /* ← key change */
   gap: 1rem;
 }
 
@@ -80,7 +82,11 @@
   margin: 0;
   line-height: 1.5;
   font-family: "AvantGarde Bk BT", "ITC Avant Garde Gothic", "Century Gothic", sans-serif;
-  /* IMPORTANT: Ensures values use the body font, not Zen Dots */
+
+  /* ── prevent long strings from overflowing ── */
+  overflow-wrap: anywhere;   /* breaks anywhere if needed (best modern option) */
+  word-break: break-word;    /* legacy fallback */
+  white-space: pre-wrap;     /* preserves newlines the user typed in the textarea */
 }
 
 .divider {
